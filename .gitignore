@@ -1,0 +1,6 @@
+.env
+.garmin_tokens/
+strava_token.json
+tcx_cache/
+.venv/
+__pycache__/
