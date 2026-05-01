@@ -36,7 +36,7 @@ STRAVA_CLIENT_SECRET = os.getenv("STRAVA_CLIENT_SECRET")
 GARMIN_EMAIL = os.getenv("GARMIN_EMAIL")
 GARMIN_PASSWORD = os.getenv("GARMIN_PASSWORD")
 
-STRAVA_TOKEN_FILE = Path("strava_token.json")
+STRAVA_TOKEN_FILE = Path(".strava_token.json")
 GARMIN_TOKENSTORE = Path(".garmin_tokens")
 TCX_DIR = Path("tcx_cache")
 
