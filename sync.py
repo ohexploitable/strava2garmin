@@ -325,7 +325,7 @@ def main(dry_run=False, after=None):
         key = activity["start_date"].replace("T", " ")[:16]
         utc_dt = datetime.strptime(activity["start_date"][:10], "%Y-%m-%d")
         match = None
-        for _ in range(5):
+        for _ in range(10):
             time.sleep(2)
             fresh = garmin.get_activities_by_date(
                 (utc_dt - timedelta(days=1)).strftime("%Y-%m-%d"),
