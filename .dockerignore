@@ -1,0 +1,7 @@
+.env
+.venv
+.strava_token.json
+.garmin_tokens
+tcx_cache
+__pycache__
+*.pyc

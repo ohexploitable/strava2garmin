@@ -1,3 +1,5 @@
 garminconnect
 requests
 python-dotenv
+flask
+gunicorn
