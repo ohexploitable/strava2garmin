@@ -10,9 +10,12 @@ Flow:
 """
 
 import argparse
+import base64
+import io
 import json
 import os
 import sys
+import tarfile
 import time
 import webbrowser
 from datetime import datetime, timedelta, timezone
@@ -258,9 +261,33 @@ def connect_garmin():
 
 
 
+# ── Credential bootstrap (Cloud Run) ─────────────────────────────────────────
+
+def bootstrap_credentials():
+    # Restore Strava token file from env var if missing (e.g. cold start on Cloud Run)
+    refresh_token = os.getenv("STRAVA_REFRESH_TOKEN")
+    if refresh_token and not STRAVA_TOKEN_FILE.exists():
+        STRAVA_TOKEN_FILE.write_text(json.dumps({
+            "refresh_token": refresh_token,
+            "access_token": "",
+            "expires_at": 0,
+        }))
+        print("Restored Strava token from environment.")
+
+    # Restore Garmin token directory from base64-encoded tar.gz env var if missing
+    garmin_tokens_b64 = os.getenv("GARMIN_TOKENS")
+    if garmin_tokens_b64 and not GARMIN_TOKENSTORE.exists():
+        data = base64.b64decode(garmin_tokens_b64)
+        with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tar:
+            tar.extractall(".")
+        print("Restored Garmin tokens from environment.")
+
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main(dry_run=False, after=None):
+    bootstrap_credentials()
+
     for var, name in [
         (STRAVA_CLIENT_ID, "STRAVA_CLIENT_ID"),
         (STRAVA_CLIENT_SECRET, "STRAVA_CLIENT_SECRET"),
