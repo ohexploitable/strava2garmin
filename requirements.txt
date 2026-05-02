@@ -1,4 +1,4 @@
-garminconnect
+garminconnect==0.2.8
 requests
 python-dotenv
 flask

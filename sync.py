@@ -250,7 +250,7 @@ def connect_garmin():
     except (GarminConnectAuthenticationError, GarminConnectConnectionError):
         print("Garmin: no saved session — logging in fresh...")
         garmin.login()
-        garmin.garth.dump(str(GARMIN_TOKENSTORE)) if hasattr(garmin, "garth") else garmin.dump_tokens(str(GARMIN_TOKENSTORE))
+        garmin.garth.dump(str(GARMIN_TOKENSTORE))
         print("Garmin: session saved.")
     except GarminConnectTooManyRequestsError:
         print("Garmin: rate limited — wait a few minutes and retry.")
@@ -364,7 +364,7 @@ def main(dry_run=False, after=None):
                 break
         if match:
             try:
-                garmin.connectapi(
+                garmin.garth.connectapi(
                     f"/activity-service/activity/{match['activityId']}",
                     method="PUT",
                     json={"activityName": "[s2g] " + name},
