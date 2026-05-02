@@ -1,4 +1,5 @@
 garminconnect==0.2.8
+garth==0.4.47
 requests
 python-dotenv
 flask
