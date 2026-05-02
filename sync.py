@@ -15,7 +15,7 @@ import os
 import sys
 import time
 import webbrowser
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlparse
@@ -167,7 +167,7 @@ def should_sync(activity):
 
 def build_tcx(activity, detail, streams):
     sport      = SPORT_MAP.get(activity.get("type", ""), "Other")
-    name       = activity.get("name", "Activity") + " (s2g)"
+    name       = "[s2g] " + activity.get("name", "Activity")
     start_time = activity.get("start_date", "")
     calories   = int(detail.get("calories") or 0)
     elapsed    = detail.get("elapsed_time", 0)
@@ -319,8 +319,33 @@ def main(dry_run=False, after=None):
             new_count += 1
         except Exception as e:
             print(f"  Upload failed: {e}")
+            time.sleep(1)
+            continue
 
-        time.sleep(1)
+        key = activity["start_date"].replace("T", " ")[:16]
+        utc_dt = datetime.strptime(activity["start_date"][:10], "%Y-%m-%d")
+        match = None
+        for _ in range(5):
+            time.sleep(2)
+            fresh = garmin.get_activities_by_date(
+                (utc_dt - timedelta(days=1)).strftime("%Y-%m-%d"),
+                (utc_dt + timedelta(days=1)).strftime("%Y-%m-%d"),
+            )
+            match = next((a for a in fresh if a["startTimeGMT"][:16] == key), None)
+            if match:
+                break
+        if match:
+            try:
+                garmin.garth.connectapi(
+                    f"/activity-service/activity/{match['activityId']}",
+                    method="PUT",
+                    json={"activityName": "[s2g] " + name},
+                )
+                print(f"  Renamed to: [s2g] {name}")
+            except Exception as e:
+                print(f"  Rename failed: {e}")
+        else:
+            print("  Rename skipped: activity not yet indexed.")
 
     if new_count == 0:
         print("Nothing new to sync.")
@@ -334,8 +359,9 @@ if __name__ == "__main__":
     parser.add_argument("--after", metavar="YYYY-MM-DD", help="Only sync activities after this date.")
     args = parser.parse_args()
 
-    after_ts = None
     if args.after:
         after_ts = datetime.strptime(args.after, "%Y-%m-%d").timestamp()
+    else:
+        after_ts = (datetime.now() - timedelta(days=7)).timestamp()
 
     main(dry_run=args.dry_run, after=after_ts)

@@ -4,3 +4,4 @@
 tcx_cache/
 .venv/
 __pycache__/
+delete_untagged.py
