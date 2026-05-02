@@ -1,4 +1,4 @@
-# strava-to-garmin
+# strava2garmin
 
 Syncs non-Garmin activities from Strava to Garmin Connect. Uploads as TCX files with calorie data, and skips activities that already exist on Garmin Connect.
 

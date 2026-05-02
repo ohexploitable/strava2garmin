@@ -167,7 +167,7 @@ def should_sync(activity):
 
 def build_tcx(activity, detail, streams):
     sport      = SPORT_MAP.get(activity.get("type", ""), "Other")
-    name       = activity.get("name", "Activity")
+    name       = activity.get("name", "Activity") + " (s2g)"
     start_time = activity.get("start_date", "")
     calories   = int(detail.get("calories") or 0)
     elapsed    = detail.get("elapsed_time", 0)
