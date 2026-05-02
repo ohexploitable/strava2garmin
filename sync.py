@@ -286,6 +286,7 @@ def bootstrap_credentials():
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main(dry_run=False, after=None):
+    print("Hello world!")
     bootstrap_credentials()
 
     for var, name in [
