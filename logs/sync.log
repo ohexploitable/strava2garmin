@@ -1,0 +1,22 @@
+Garmin: loaded saved session.
+Garmin: 200 existing activities loaded for dedup.
+
+Fetching Strava token...
+Refreshing Strava token...
+Fetching Strava activities...
+Found 4 activities to sync (4 skipped).
+
+Syncing: [2026-07-09] Cycling (Ride)
+  Uploaded (126.0 kcal).
+  Renamed to: [s2g] Cycling
+Syncing: [2026-07-09] Cycling (Ride)
+  Uploaded (157.0 kcal).
+  Renamed to: [s2g] Cycling
+Syncing: [2026-07-10] Cycling (Ride)
+  Uploaded (118.0 kcal).
+  Renamed to: [s2g] Cycling
+Syncing: [2026-07-10] Cycling (Ride)
+  Uploaded (339.0 kcal).
+  Renamed to: [s2g] Cycling
+
+Done. Synced 4 new activities to Garmin Connect.
